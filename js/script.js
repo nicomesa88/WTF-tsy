@@ -131,17 +131,17 @@ var SearchView = Backbone.View.extend({
      },
 
      _render: function() {
-var htmlString = '<a href="#home" id="etsy-logo"><img id="logo" src="images/etsy-logo.jpg"></a>'
+var htmlString = '<a href="#home" id="etsy-logo"><p id="logo" src="images/etsy-logo.jpg">' + 'WTF-STY' + '</p></a>'
          htmlString +='<input class="search-el" placeholder="Search for items or shops">'
-         htmlString += '<header id="nav-header">' + '<ul>' +
-             '<a href="#search/clothing accessories"><li class="tab">Clothing & Accessories</li></a>' +
-             '<a href="#search/jewelry"><li class="tab">Jewelry</li></a>' +
-             '<a href="#search/craft supplies"><li class="tab"> Craft Supplies & Tools</li></a>' +
-             '<a href="#search/weddings"><li class="tab">Weddings</li></a>' +
-             '<a href="#search/entertainment"><li class="tab">Entertainment</li></a>' +
-             '<a href="#search/home living"><li class="tab">Home & Living</li></a>' +
+         htmlString += '<header id="header">' + '<ul>' +
+             '<a href="#search/human teeth"><li class="tab">Human Teeth</li></a>' +
+             '<a href="#search/human hair"><li class="tab">Human Hair</li></a>' +
+             '<a href="#search/dick socks"><li class="tab"> Dick Socks</li></a>' +
+             '<a href="#search/bones"><li class="tab">Bones</li></a>' +
+             '<a href="#search/bronies"><li class="tab">Bronies</li></a>' +
+             '<a href="#taxadermy/"><li class="tab">Taxadermy</li></a>' +
              '<a href="#search/kids baby"><li class="tab">Kids & Baby</li></a>' +
-             '<a href="#search/vintage"><li class="tab">Vintage</li></a>' + '</ul>' + '</header>'
+             '<a href="#search/Mouth gag"><li class="tab">Mouth Gag</li></a>' + '</ul>' + '</header>'
          this.el.innerHTML = htmlString
      }
  })
@@ -151,11 +151,26 @@ var htmlString = '<a href="#home" id="etsy-logo"><img id="logo" src="images/etsy
 
 var EtsyRouter = Backbone.Router.extend ({
     routes: {
-        "home" : "listViewHandler",
+        "home/:wtf" : "listViewHandler",
         "details/:id": "detailedViewHandler",
         "search/:keywords": "searchViewHandler",
         "*default" : "listViewHandler"
     },
+
+    homeHandler: function() {
+        var listModel = new ListModel()
+         var listView = new ListView(listModel)
+         var searchView = new SearchView(listModel)
+         var promise = listModel.fetch({
+                 dataType: "jsonp",
+                 data: {
+                     includes: "Images,Shop",
+                     api_key: listModel._apiKey
+                 }
+             })
+
+         promise.then(listView._render.bind(listView))
+     },
 
     listViewHandler: function() {
          var listModel = new ListModel()
@@ -164,6 +179,7 @@ var EtsyRouter = Backbone.Router.extend ({
          var promise = listModel.fetch({
                  dataType: "jsonp",
                  data: {
+                    keywords: "weird",
                      includes: "Images,Shop",
                      api_key: listModel._apiKey
                  }
